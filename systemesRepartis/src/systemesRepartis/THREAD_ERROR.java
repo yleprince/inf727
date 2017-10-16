@@ -26,7 +26,7 @@ public class THREAD_ERROR extends Thread {
 			}
 
 			String error_result = builder.toString();
-			System.out.println("Error sReader : " + error_result);
+			System.out.println("Error Reader : " + error_result);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
