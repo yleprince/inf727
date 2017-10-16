@@ -14,7 +14,7 @@ public class THREAD_ERROR extends Thread {
 	public void run() {
 		Process pro;
 		try {
-			pro = m_pb.start();
+			pro = this.m_pb.start();
 
 			BufferedReader error_reader = new BufferedReader(new InputStreamReader(pro.getErrorStream()));
 			StringBuilder builder = new StringBuilder();

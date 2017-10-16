@@ -14,7 +14,7 @@ public class THREAD_STD extends Thread {
 	public void run() {
 		Process pro;
 		try {
-			pro = m_pb.start();
+			pro = this.m_pb.start();
 
 			BufferedReader std_reader = new BufferedReader(new InputStreamReader(pro.getInputStream()));
 			StringBuilder builder = new StringBuilder();
