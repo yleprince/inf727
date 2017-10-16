@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class THREAD_STD extends Thread {
+public class THREAD_ERROR extends Thread {
 	private ProcessBuilder m_pb;
 
-	public THREAD_STD(ProcessBuilder pb) {
+	public THREAD_ERROR(ProcessBuilder pb) {
 		this.m_pb = pb;
 	}
 
@@ -16,17 +16,17 @@ public class THREAD_STD extends Thread {
 		try {
 			pro = m_pb.start();
 
-			BufferedReader std_reader = new BufferedReader(new InputStreamReader(pro.getInputStream()));
+			BufferedReader error_reader = new BufferedReader(new InputStreamReader(pro.getErrorStream()));
 			StringBuilder builder = new StringBuilder();
-			String std_line = null;
+			String error_line = null;
 
-			while ((std_line = std_reader.readLine()) != null) {
-				builder.append(std_line);
+			while ((error_line = error_reader.readLine()) != null) {
+				builder.append(error_line);
 				builder.append(System.getProperty("line.separator"));
 			}
 
-			String std_result = builder.toString();
-			System.out.println("STD Reader : " + std_result);
+			String error_result = builder.toString();
+			System.out.println("Error sReader : " + error_result);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
