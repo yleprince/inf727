@@ -20,6 +20,11 @@ public class MASTER_Q42_thread {
             builder.append(line);
             builder.append(System.getProperty("line.separator"));
         }
+        
+        while ( (line = error_reader.readLine()) != null) {
+            builder.append(line);
+            builder.append(System.getProperty("line.separator"));
+        }
 
         String result = builder.toString();
         System.out.println("Reader : " + result);
