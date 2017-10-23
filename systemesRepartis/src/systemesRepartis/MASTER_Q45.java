@@ -19,12 +19,12 @@ public class MASTER_Q45 {
 		Process p = pb.start();
 
 		BlockingQueue<String> blocking_queue = new ArrayBlockingQueue<String>(1024);
-		THREAD_STD t = new THREAD_STD(p, blocking_queue); // Creation du thread reader std
+		THREAD_STD_BQ t = new THREAD_STD_BQ(p, blocking_queue); // Creation du thread reader std
 		t.start();
 		String response = blocking_queue.poll(timeout, TimeUnit.SECONDS);
 
 		BlockingQueue<String> blocking_queue_error = new ArrayBlockingQueue<String>(1024);
-		THREAD_ERROR te = new THREAD_ERROR(p, blocking_queue_error); // Creation du thread reader err
+		THREAD_STD_BQ_ERROR te = new THREAD_STD_BQ_ERROR(p, blocking_queue_error); // Creation du thread reader err
 		te.start();
 		String responseErr = blocking_queue_error.poll(timeout, TimeUnit.SECONDS);
 
