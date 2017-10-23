@@ -1,11 +1,15 @@
 package systemesRepartis;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class MASTER_Q45 {
+public class MASTER_PART_8 {
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		// long timeout = 2; // Test 1
@@ -14,11 +18,40 @@ public class MASTER_Q45 {
 		// ProcessBuilder pb45 = new ProcessBuilder("java", "-jar",
 		// "/home/bud/Downloads/tmp/slave.jar");
 
-		ProcessBuilder pb45 = new ProcessBuilder("java", "-jar", "/home/bud/Downloads/tmp/slave_Q45_test3.jar"); // Test
-																													// //
-																													// 3
-		getResponse(pb45, timeout);
+		ProcessBuilder pb45 = new ProcessBuilder("java", "-jar", "/home/bud/Downloads/tmp/slave_Q45_test3.jar"); // Test3
+		// getResponse(pb45, timeout);
 
+		ArrayList<String> computersAddresses = readFileLineByLine("/home/bud/Documents/s1/inf727/computersOn.txt");
+
+		
+		
+	}
+
+	public static String[] deploy() {
+
+		return null;
+	}
+
+	public static ArrayList<String> readFileLineByLine(String filename) {
+		/**
+		 * Return an ArrayList<String> where all value is a line of the file
+		 */
+
+		ArrayList<String> lines = new ArrayList<String>();
+		try {
+
+			File f = new File(filename);
+			BufferedReader b = new BufferedReader(new FileReader(f));
+			String readLine = "";
+
+			while ((readLine = b.readLine()) != null) {
+				lines.add(readLine);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static String getResponse(ProcessBuilder pb, long timeout) throws IOException, InterruptedException {
