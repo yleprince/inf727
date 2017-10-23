@@ -30,15 +30,14 @@ public class THREAD_STD_BQ extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		String std_result = builder.toString();
-		//System.out.println("STD Reader : " + std_result);
-		
-		
-        try {
-            this.m_bq.put(std_result);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(THREAD_STD_BQ.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		// System.out.println("STD Reader : " + std_result);
+
+		try {
+			this.m_bq.put(std_result);
+		} catch (InterruptedException ex) {
+			Logger.getLogger(THREAD_STD_BQ.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 }

@@ -8,14 +8,18 @@ import java.util.concurrent.TimeUnit;
 public class MASTER_Q45 {
 	public static void main(String[] args) throws IOException, InterruptedException {
 
-		float timeout = (float) 2.0;
-		ProcessBuilder pb45 = new ProcessBuilder("java", "-jar", "/home/bud/Downloads/tmp/slave.jar");
+		// long timeout = 2; // Test 1
+
+		long timeout = 15; // Test 2
+		//ProcessBuilder pb45 = new ProcessBuilder("java", "-jar", "/home/bud/Downloads/tmp/slave.jar");
+
+		ProcessBuilder pb45 = new ProcessBuilder("java", "-jar", "/home/bud/Downloads/tmp/slave_Q45_test3.jar"); // Test
+																													// 3
 		getResponse(pb45, timeout);
-		
 
 	}
 
-	public static String getResponse(ProcessBuilder pb, float timeout) throws IOException, InterruptedException {
+	public static String getResponse(ProcessBuilder pb, long timeout) throws IOException, InterruptedException {
 		Process p = pb.start();
 
 		BlockingQueue<String> blocking_queue = new ArrayBlockingQueue<String>(1024);
@@ -24,7 +28,7 @@ public class MASTER_Q45 {
 		String response = blocking_queue.poll(timeout, TimeUnit.SECONDS);
 
 		BlockingQueue<String> blocking_queue_error = new ArrayBlockingQueue<String>(1024);
-		THREAD_STD_BQ_ERROR te = new THREAD_STD_BQ_ERROR(p, blocking_queue_error); // Creation du thread reader err
+		THREAD_ERROR_BQ te = new THREAD_ERROR_BQ(p, blocking_queue_error); // Creation du thread reader err
 		te.start();
 		String responseErr = blocking_queue_error.poll(timeout, TimeUnit.SECONDS);
 

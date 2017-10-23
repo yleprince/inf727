@@ -11,5 +11,10 @@ public class SLAVE {
         System.out.print("3 + 5 = ");
         System.out.print(result);
         System.out.println("");
+        
+        // Q45 - Test 3
+       // System.err.print("3 + 5 = ");
+       // System.err.print(result);
+       // System.err.println("");
     }
 }
