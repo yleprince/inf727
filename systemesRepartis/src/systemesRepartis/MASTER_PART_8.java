@@ -9,27 +9,38 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 public class MASTER_PART_8 {
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		// long timeout = 2; // Test 1
 
-		long timeout = 15; // Test 2
+		//long timeout = 15; // Test 2
 		// ProcessBuilder pb45 = new ProcessBuilder("java", "-jar",
 		// "/home/bud/Downloads/tmp/slave.jar");
 
-		ProcessBuilder pb45 = new ProcessBuilder("java", "-jar", "/home/bud/Downloads/tmp/slave_Q45_test3.jar"); // Test3
+		//ProcessBuilder pb45 = new ProcessBuilder("java", "-jar", "/home/bud/Downloads/tmp/slave_Q45_test3.jar"); // Test3
 		// getResponse(pb45, timeout);
 
-		ArrayList<String> computersAddresses = readFileLineByLine("/home/bud/Documents/s1/inf727/computersOn.txt");
-
-		
+		deploy();
 		
 	}
 
-	public static String[] deploy() {
+	public static String[] deploy() throws IOException, InterruptedException {
 
+		ArrayList<String> computersNames = readFileLineByLine("/home/bud/Documents/s1/inf727/computersOn.txt");
+		//String response;
+		for (String pc : computersNames) {
+			System.out.println(pc);
+			ProcessBuilder pb46 = new ProcessBuilder("ssh",  "-o", "StrictHostKeyChecking=no", "yleprince@" + pc, "hostname");
+            getResponse(pb46, 5);
+            
+            //System.out.println(response);
+		}
+		System.out.println("End Deploy");
 		return null;
+				
 	}
 
 	public static ArrayList<String> readFileLineByLine(String filename) {
@@ -47,11 +58,12 @@ public class MASTER_PART_8 {
 			while ((readLine = b.readLine()) != null) {
 				lines.add(readLine);
 			}
-
+			
+			b.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return lines;
 	}
 
 	public static String getResponse(ProcessBuilder pb, long timeout) throws IOException, InterruptedException {
@@ -70,12 +82,12 @@ public class MASTER_PART_8 {
 		if (response == null && responseErr == null) {
 			System.err.println("Process killed by timeout");
 		} else if (response != null && responseErr.length() == 0) {
-			System.out.println("Response : " + response);
+			System.out.println("Response std : " + response);
 			return response;
 		} else if (response.length() == 0 && responseErr != null) {
 			System.err.println("Error : " + responseErr);
 		} else {
-			System.out.println("Response : " + response);
+			System.out.println("Response std: " + response);
 			System.err.println("Error : " + responseErr);
 		}
 		p.destroy();
