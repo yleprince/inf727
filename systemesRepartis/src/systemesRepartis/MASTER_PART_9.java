@@ -23,11 +23,17 @@ public class MASTER_PART_9 {
 		// "/home/bud/Downloads/tmp/slave_Q45_test3.jar"); // Test3
 		// getResponse(pb45, timeout);
 
-		// question47();
-		question48();
-
+		//question47();
+		// question48();
+		question49();
 	}
 
+	public static void question49() {
+		System.out.println("Question 49 -- start\n");
+
+		System.out.println("\nQuestion 49 -- end");
+
+	}
 	public static void question48() throws IOException, InterruptedException {
 		System.out.println("Question 48 -- start\n");
 
