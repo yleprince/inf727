@@ -23,12 +23,30 @@ public class MASTER_PART_9 {
 		// getResponse(pb45, timeout);
 
 		String computerList = "/home/bud/Documents/s1/inf727/computersOn.txt";
-
-		deploy(computerList);
+		String inputPath = "/home/bud/Downloads/tmp/slave.jar";
+		String outputPath = "/tmp/yleprince/";
+		
+		deploy(computerList, inputPath, outputPath);
 
 	}
+	
+	public static String mkDir(String pc, String outputPath) throws IOException, InterruptedException {
+		String response_mkdir;
+		ProcessBuilder pb_mkdir = new ProcessBuilder("ssh", "-o", "StrictHostKeyChecking=no", "yleprince@" + pc,
+				"mkdir", "-p", outputPath);
+		response_mkdir = getResponse(pb_mkdir, 5);
+		return response_mkdir;
+	}
+	
+	public static String scp(String pc, String inputPath, String outputPath) throws IOException, InterruptedException {
+		String response_scp;
+		String user = "yleprince";
+		ProcessBuilder pb_scp = new ProcessBuilder("scp", inputPath, user +"@" + pc + ":" + outputPath);
+		response_scp = getResponse(pb_scp, 5);
+		return response_scp;
+	}
 
-	public static void deploy(String computerListFilename) throws IOException, InterruptedException {
+	public static void deploy(String computerListFilename, String inputPath, String outputPath) throws IOException, InterruptedException {
 
 		System.out.println("Enter Deploy");
 		ArrayList<String> computersUsables = deployable(computerListFilename);
@@ -38,14 +56,11 @@ public class MASTER_PART_9 {
 
 		System.out.println("Loop Deploy");
 		for (String pc : computersUsables) {
-			ProcessBuilder pb_mkdir = new ProcessBuilder("ssh", "-o", "StrictHostKeyChecking=no", "yleprince@" + pc,
-					"mkdir", "-p", "/tmp/yleprince1/");
-			response_mkdir = getResponse(pb_mkdir, 5);
+
+			response_mkdir = mkDir(pc, outputPath);
 			System.out.println("\tDeployed on: " + pc + response_mkdir);
 
-			ProcessBuilder pb_scp = new ProcessBuilder("scp", "/home/bud/Downloads/tmp/slave.jar",
-					"yleprince@" + pc + ":/tmp/yleprince1/");
-			response_scp = getResponse(pb_scp, 5);
+			response_scp = scp(pc, inputPath, outputPath);
 			System.out.println("\tCopied on: " + pc + response_scp);
 
 
