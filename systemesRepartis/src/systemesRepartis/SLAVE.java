@@ -15,42 +15,7 @@ public class SLAVE {
 		// question44();
 		// question45();
 		//System.out.println(findPathFromFilename("/home/bud/mqslj/test2.txt"));
-		question49(args);
-	}
-
-	public static void question49(String[] args) throws IOException, InterruptedException {
-		if (args.length != 1) {
-			System.err.println("Erreur: pas ou trop d'arguments pour le slave");
-		}
-
-		// 0. Init
-		String filename = args[0];
-		String filenameNumber = findFileNumber(filename);
-		String filenamePath = findPathFromFilename(filename);
-		
-		// 1. Get the file content
-		ArrayList<String> lines = readFileLineByLine(filename);
-		
-		if (!lines.isEmpty()) {
-
-			mkDir(findPathFromFilename(filename) + "map/");
-			String outputFilename = filenamePath + "map/UM" + filenameNumber + ".txt";
-			
-			// 2. do the map
-			ArrayList<String> words = new ArrayList<String>();
-			for (String line : lines) {
-				for (String word : line.split("\\s+")) {
-					words.add(word);
-				}
-			}
-
-			// 3. export the mapped file
-			PrintWriter writer = new PrintWriter(outputFilename, "UTF-8");
-			for (String word : words) {
-				writer.println(word + " 1");
-			}
-			writer.close();
-		}
+		question49(args);	// cd​ ​ tmp/<votre​ ​ nom​ ​ d’utilisateur>/ //	java​ ​ -jar​ ​ slave.jar​ ​ /tmp/<votre​ ​ nom​ ​ d’utilisateur>/splits/S1.txt
 	}
 	
 	public static void mkDir(String path) throws IOException, InterruptedException {
@@ -110,6 +75,41 @@ public class SLAVE {
 		}
 		String path = filename.substring(0, filename.length() + 1 - file.length());
 		return path;
+	}
+	
+	public static void question49(String[] args) throws IOException, InterruptedException {
+		if (args.length != 1) {
+			System.err.println("Erreur: pas ou trop d'arguments pour le slave");
+		}
+
+		// 0. Init
+		String filename = args[0];
+		String filenameNumber = findFileNumber(filename);
+		String filenamePath = findPathFromFilename(filename);
+		
+		// 1. Get the file content
+		ArrayList<String> lines = readFileLineByLine(filename);
+		
+		if (!lines.isEmpty()) {
+
+			mkDir(findPathFromFilename(filename) + "map/");
+			String outputFilename = filenamePath + "map/UM" + filenameNumber + ".txt";
+			
+			// 2. do the map
+			ArrayList<String> words = new ArrayList<String>();
+			for (String line : lines) {
+				for (String word : line.split("\\s+")) {
+					words.add(word);
+				}
+			}
+
+			// 3. export the mapped file
+			PrintWriter writer = new PrintWriter(outputFilename, "UTF-8");
+			for (String word : words) {
+				writer.println(word + " 1");
+			}
+			writer.close();
+		}
 	}
 	
 	public static void question45() {

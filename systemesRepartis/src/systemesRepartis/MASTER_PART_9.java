@@ -25,13 +25,13 @@ public class MASTER_PART_9 {
 
 		//question47();
 		// question48();
-		question49();
+		question50();
 	}
 
-	public static void question49() {
-		System.out.println("Question 49 -- start\n");
+	public static void question50() {
+		System.out.println("Question 50 -- start\n");
 
-		System.out.println("\nQuestion 49 -- end");
+		System.out.println("\nQuestion 50 -- end");
 
 	}
 	public static void question48() throws IOException, InterruptedException {
