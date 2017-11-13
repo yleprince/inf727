@@ -14,10 +14,10 @@ public class SLAVE {
 
 		// question44();
 		// question45();
-		//System.out.println(findPathFromFilename("/home/bud/mqslj/test2.txt"));
-		question49(args);	// cd​ ​ tmp/<votre​ ​ nom​ ​ d’utilisateur>/ //	java​ ​ -jar​ ​ slave.jar​ ​ /tmp/<votre​ ​ nom​ ​ d’utilisateur>/splits/S1.txt
+		question49(args); // cd​ ​ tmp/<votre​ ​ nom​ ​ d’utilisateur>/ // java​ ​ -jar​ ​ slave.jar​ ​
+							// /tmp/<votre​ ​ nom​ ​ d’utilisateur>/splits/S1.txt
 	}
-	
+
 	public static void mkDir(String path) throws IOException, InterruptedException {
 		ProcessBuilder pb_mkdir = new ProcessBuilder("mkdir", "-p", path);
 		pb_mkdir.start();
@@ -73,10 +73,11 @@ public class SLAVE {
 		} else {
 			System.err.println("NO MATCH: error during regex");
 		}
-		String path = filename.substring(0, filename.length() + 1 - file.length());
+		String pathSectionToRemove = "splits/";
+		String path = filename.substring(0, filename.length() + 1 - file.length() - pathSectionToRemove.length());
 		return path;
 	}
-	
+
 	public static void question49(String[] args) throws IOException, InterruptedException {
 		if (args.length != 1) {
 			System.err.println("Erreur: pas ou trop d'arguments pour le slave");
@@ -86,15 +87,15 @@ public class SLAVE {
 		String filename = args[0];
 		String filenameNumber = findFileNumber(filename);
 		String filenamePath = findPathFromFilename(filename);
-		
+
 		// 1. Get the file content
 		ArrayList<String> lines = readFileLineByLine(filename);
-		
+
 		if (!lines.isEmpty()) {
 
 			mkDir(findPathFromFilename(filename) + "map/");
 			String outputFilename = filenamePath + "map/UM" + filenameNumber + ".txt";
-			
+
 			// 2. do the map
 			ArrayList<String> words = new ArrayList<String>();
 			for (String line : lines) {
@@ -111,7 +112,7 @@ public class SLAVE {
 			writer.close();
 		}
 	}
-	
+
 	public static void question45() {
 		int result = 3 + 5;
 		System.err.print("3 + 5 = ");
