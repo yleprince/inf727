@@ -38,16 +38,51 @@ public class MASTER_PART_9 {
 
 		question47(computers);
 		masterMap = question48(computers);
-		question50(masterMap);
-		question51(masterMap);
+		//question50(masterMap);
+		question52(masterMap);
 	}
 
-	public static void question51(Map<String, String> masterMap) {
-		System.out.println("Question 50 -- start\n");
-		// Create the hashmap with the word - list of UMx
+	public static void question52(Map<String, String> masterMap) throws IOException, InterruptedException {
+		System.out.println("Question 52 -- start\n");
 		
+		System.out.println("Launching the jar on the splits");
+
+		Map<String, ArrayList<String>> keyToUMx = new HashMap<String, ArrayList<String>>();
 		
-		System.out.println("\nQuestion 50 -- end");
+		for (String splitFile : masterMap.keySet()) {
+			String pc = masterMap.get(splitFile);
+			String jarPath = WORKING_DIR + "jar/slave_map.jar";
+			System.out.println("\tLaunching " + jarPath + " with " + splitFile + " at " + pc);
+			String response_jar = launchJar(pc, jarPath, splitFile);
+			
+			String umName = "UM"+findFileNumber(splitFile);
+			for (String word : response_jar.split("\n")) {
+				ArrayList<String> umx = new ArrayList<String>();
+				if (keyToUMx.containsKey(word)) {
+					umx = keyToUMx.get(word);
+				}
+				umx.add(umName);
+				keyToUMx.put(word, umx);
+			}
+		}
+		
+		System.out.println("\nMaster map UM-pc:");
+		masterMap = updateMasterMapToUM(masterMap);
+		for (String name: masterMap.keySet()){
+            String key = name.toString();
+            String value = masterMap.get(name);  
+            System.out.println("\tFile: " + key + "\t-- pc: " + value);  
+		}
+		
+		System.out.println("\nMaster map word-UMx:");
+		for (String word: keyToUMx.keySet()){
+            String key = word;
+            ArrayList<String> value = keyToUMx.get(word);  
+            System.out.println("\tWord: " + key + "\t-- Umx: " + value);  
+		}
+
+
+		System.out.println("\nQuestion 52 -- end");
 
 	}
 	
@@ -57,17 +92,18 @@ public class MASTER_PART_9 {
 
 		
 		for (String splitFile : masterMap.keySet()) {
-			String pc = masterMap.get(splitFile).toString();
+			String pc = masterMap.get(splitFile);
 			String jarPath = WORKING_DIR + "jar/slave_map.jar";
 			System.out.println("\tLaunching " + jarPath + " with " + splitFile + " at " + pc);
-			launchJar(pc, jarPath, splitFile);
+			String response_jar = launchJar(pc, jarPath, splitFile);
+			System.out.println(response_jar);
 		}
 		
 		System.out.println("\nMaster map UM:");
 		masterMap = updateMasterMapToUM(masterMap);
 		for (String name: masterMap.keySet()){
             String key = name.toString();
-            String value = masterMap.get(name).toString();  
+            String value = masterMap.get(name);  
             System.out.println("\tFile: " + key + " -- pc: " + value);  
 		}
 
