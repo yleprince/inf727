@@ -11,8 +11,14 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class MASTER_PART_9 {
+
+	private static final String WORKING_DIR = "/tmp/yleprince/";
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		// long timeout = 2; // Test 1
@@ -24,36 +30,38 @@ public class MASTER_PART_9 {
 		// ProcessBuilder pb45 = new ProcessBuilder("java", "-jar",
 		// "/home/bud/Downloads/tmp/slave_Q45_test3.jar"); // Test3
 		// getResponse(pb45, timeout);
-
+		
 		System.out.println("Searching 3 computers");
 		ArrayList<String> computers = findComputers(3);
-		
 		Map<String, String> masterMap = new HashMap<String, String>();
-		
 		System.out.println(computers);
+
 		question47(computers);
 		masterMap = question48(computers);
 		question50(masterMap);
-		
 	}
 
+	
 	public static void question50(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 50 -- start\n");
 		System.out.println("Launching the jar on the splits");
-		/*
-		for (String name: masterMap.keySet()){
 
-            String key =name.toString();
-            String value = masterMap.get(name).toString();  
-            System.out.println("\tkey: " + key + " value:" + value);  
-		}
-		*/
+		
 		for (String splitFile : masterMap.keySet()) {
 			String pc = masterMap.get(splitFile).toString();
-			String jarPath = "/tmp/yleprince/jar/slave_map.jar";
+			String jarPath = WORKING_DIR + "jar/slave_map.jar";
+			System.out.println("\tLaunching " + jarPath + " with " + splitFile + " at " + pc);
 			launchJar(pc, jarPath, splitFile);
 		}
-            
+		
+		System.out.println("\nMaster map UM:");
+		masterMap = updateMasterMapToUM(masterMap);
+		for (String name: masterMap.keySet()){
+            String key = name.toString();
+            String value = masterMap.get(name).toString();  
+            System.out.println("\tFile: " + key + " -- pc: " + value);  
+		}
+
 		System.out.println("\nQuestion 50 -- end");
 
 	}
@@ -75,8 +83,8 @@ public class MASTER_PART_9 {
 		
 		// 1. create files
 		String file;
-		String inputPath = "/home/bud/Downloads/tmp/";
-		String outputPath = "/tmp/yleprince/split/";
+		String inputPath = "/tmp/";
+		String outputPath = WORKING_DIR + "split/";
 
 		for (int i = 0; i < contents.size(); i++) {
 			file = "split" + i + ".txt";
@@ -100,7 +108,7 @@ public class MASTER_PART_9 {
 		System.out.println("Deploying slave.jar on computers");
 				
 		String inputPath = "/tmp/slave_map.jar";
-		String outputPath = "/tmp/yleprince/jar/";
+		String outputPath = WORKING_DIR + "jar/";
 		for(String pc : computers) {
 			deployOnComputer(pc, inputPath, outputPath);
 		}
@@ -109,14 +117,12 @@ public class MASTER_PART_9 {
 
 	public static String mkDir(String pc, String outputPath) throws IOException, InterruptedException {
 		String response_mkdir;
-		ProcessBuilder pb_mkdir = new ProcessBuilder("ssh", "-o", "StrictHostKeyChecking=no", "yleprince@" + pc,
-				"mkdir", "-p", outputPath);
+		ProcessBuilder pb_mkdir = new ProcessBuilder("ssh", "yleprince@" + pc, "mkdir", "-p", outputPath);
 		response_mkdir = getResponse(pb_mkdir, 5);
 		return response_mkdir;
 	}
 	
 	public static String launchJar(String pc, String jarPath, String arguments) throws IOException, InterruptedException {
-		System.out.println("Launching " + jarPath + " with " + arguments + " at " + pc);
 		ProcessBuilder pb_jar = new ProcessBuilder("ssh", "yleprince@" + pc, "java", "-jar", jarPath, arguments);
 		String response_jar = getResponse(pb_jar, 5);
 		return response_jar;
@@ -254,4 +260,31 @@ public class MASTER_PART_9 {
 		return null;
 	}
 
+	public static String findFileNumber(String filename) {
+
+		String pattern = "(\\d+)";
+		Pattern r = Pattern.compile(pattern);
+		Matcher m = r.matcher(filename);
+
+		String fileNumber = null;
+
+		if (m.find()) {
+			fileNumber = m.group(0);
+		} else {
+			System.err.println("NO MATCH: need to give a filename containing at least a digit");
+		}
+		return fileNumber;
+	}
+	
+	public static Map<String, String> updateMasterMapToUM(Map<String, String> masterMapSPLIT){
+		Map<String, String> masterMapUM = new HashMap<String, String>();
+		for (String file : masterMapSPLIT.keySet()) {
+			String fileID = findFileNumber(file);
+			String pc = masterMapSPLIT.get(file);
+			String newFileName = WORKING_DIR + "UM/UM" + fileID + ".txt";
+			masterMapUM.put(newFileName, pc); 
+		}
+		return masterMapUM;
+	}
+		
 }

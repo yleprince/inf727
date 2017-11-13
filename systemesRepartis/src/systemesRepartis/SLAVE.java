@@ -45,6 +45,7 @@ public class SLAVE {
 		return lines;
 	}
 
+	/*
 	public static String findFileNumber(String filename) {
 
 		String pattern = "(\\d+)";
@@ -60,7 +61,7 @@ public class SLAVE {
 		}
 		return fileNumber;
 	}
-
+*/
 	public static String findPathFromFilename(String filename) {
 		String pattern = "\\/([A-Za-z]+\\d+\\.txt)";
 		Pattern r = Pattern.compile(pattern);
@@ -84,16 +85,16 @@ public class SLAVE {
 
 		// 0. Init
 		String filename = args[0];
-		String filenameNumber = findFileNumber(filename);
-		String filenamePath = findPathFromFilename(filename);
+		String filenameNumber = systemesRepartis.MASTER_PART_9.findFileNumber(filename);
+		String filenamePath = findPathFromFilename(filename) + "/map/";
 
 		// 1. Get the file content
 		ArrayList<String> lines = readFileLineByLine(filename);
 
 		if (!lines.isEmpty()) {
 
-			mkDir(findPathFromFilename(filename) + "/map/");
-			String outputFilename = filenamePath + "/map/UM" + filenameNumber + ".txt";
+			mkDir(filenamePath);
+			String outputFilename = filenamePath + "UM" + filenameNumber + ".txt";
 
 			// 2. do the map
 			ArrayList<String> words = new ArrayList<String>();
