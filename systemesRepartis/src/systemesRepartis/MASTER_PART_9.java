@@ -37,16 +37,23 @@ public class MASTER_PART_9 {
 		
 	}
 
-	public static void question50(Map<String, String> masterMap) {
+	public static void question50(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 50 -- start\n");
+		System.out.println("Launching the jar on the splits");
+		/*
 		for (String name: masterMap.keySet()){
 
             String key =name.toString();
             String value = masterMap.get(name).toString();  
-            System.out.println("\t" + key + " " + value);  
-
-
-}
+            System.out.println("\tkey: " + key + " value:" + value);  
+		}
+		*/
+		for (String splitFile : masterMap.keySet()) {
+			String pc = masterMap.get(splitFile).toString();
+			String jarPath = "/tmp/yleprince/jar/slave_map.jar";
+			launchJar(pc, jarPath, splitFile);
+		}
+            
 		System.out.println("\nQuestion 50 -- end");
 
 	}
@@ -80,7 +87,8 @@ public class MASTER_PART_9 {
 			
 			String pc = computers.get(i);
 			deployOnComputer(pc, inputPath + file, outputPath);
-			masterMap.put(file, pc);
+			
+			masterMap.put(outputPath + file, pc);
 		}
 
 		System.out.println("\nQuestion 48 -- end");
@@ -105,6 +113,13 @@ public class MASTER_PART_9 {
 				"mkdir", "-p", outputPath);
 		response_mkdir = getResponse(pb_mkdir, 5);
 		return response_mkdir;
+	}
+	
+	public static String launchJar(String pc, String jarPath, String arguments) throws IOException, InterruptedException {
+		System.out.println("Launching " + jarPath + " with " + arguments + " at " + pc);
+		ProcessBuilder pb_jar = new ProcessBuilder("ssh", "yleprince@" + pc, "java", "-jar", jarPath, arguments);
+		String response_jar = getResponse(pb_jar, 5);
+		return response_jar;
 	}
 
 	public static String scp(String pc, String inputPath, String outputPath) throws IOException, InterruptedException {

@@ -14,8 +14,7 @@ public class SLAVE {
 
 		// question44();
 		// question45();
-		question49(args); // cd​ ​ tmp/<votre​ ​ nom​ ​ d’utilisateur>/ // java​ ​ -jar​ ​ slave.jar​ ​
-							// /tmp/<votre​ ​ nom​ ​ d’utilisateur>/splits/S1.txt
+		question49(args); //  /tmp/yleprince/splits/S1.txt // java​ ​ -jar​ ​ slave.jar​ ​
 	}
 
 	public static void mkDir(String path) throws IOException, InterruptedException {
@@ -93,8 +92,8 @@ public class SLAVE {
 
 		if (!lines.isEmpty()) {
 
-			mkDir(findPathFromFilename(filename) + "map/");
-			String outputFilename = filenamePath + "map/UM" + filenameNumber + ".txt";
+			mkDir(findPathFromFilename(filename) + "/map/");
+			String outputFilename = filenamePath + "/map/UM" + filenameNumber + ".txt";
 
 			// 2. do the map
 			ArrayList<String> words = new ArrayList<String>();
