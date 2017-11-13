@@ -39,8 +39,17 @@ public class MASTER_PART_9 {
 		question47(computers);
 		masterMap = question48(computers);
 		question50(masterMap);
+		question51(masterMap);
 	}
 
+	public static void question51(Map<String, String> masterMap) {
+		System.out.println("Question 50 -- start\n");
+		// Create the hashmap with the word - list of UMx
+		
+		
+		System.out.println("\nQuestion 50 -- end");
+
+	}
 	
 	public static void question50(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 50 -- start\n");
