@@ -15,7 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class MASTER_PART_9 {
+
+public class MASTER_PART_10 {
 
 	private static final String WORKING_DIR = "/tmp/yleprince/";
 
@@ -212,13 +213,11 @@ public class MASTER_PART_9 {
 	}
 
 	public static void deployOnComputer(String pc, String inputPath, String outputPath) throws IOException, InterruptedException {
-		String response_mkdir;
-		String response_scp;
-		
-		response_mkdir = mkDir(pc, outputPath);
-		System.out.println("\tDeployed on: " + pc + " at " + outputPath);
+						
+		String response_mkdir = mkDir(pc, outputPath);
+		System.out.println("\tDeployed on: " + pc + " at " + outputPath + response_mkdir);
 
-		response_scp = scp(pc, inputPath, outputPath);
+		String response_scp = scp(pc, inputPath, outputPath);
 		System.out.println("\tCopied on: " + pc + response_scp);
 	}
 	

@@ -28,7 +28,6 @@ public class SLAVE {
 		
 		if (!lines.isEmpty()) {
 			// 2. do the map
-			ArrayList<String> words = new ArrayList<String>();
 			for (String line : lines) {
 				for (String word : line.split("\\s+")) {
 					hset.add(word);
