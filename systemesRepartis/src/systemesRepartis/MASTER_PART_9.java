@@ -42,6 +42,10 @@ public class MASTER_PART_9 {
 		question52(masterMap);
 	}
 
+	public static void question53() {
+		
+	}
+	
 	public static void question52(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 52 -- start\n");
 		
