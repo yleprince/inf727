@@ -96,7 +96,7 @@ public class SLAVE {
 		// 0. Init
 		String filename = args[0];
 		String filenameNumber = systemesRepartis.MASTER_PART_9.findFileNumber(filename);
-		String filenamePath = findPathFromFilename(filename) + "/map/";
+		String filenamePath = findPathFromFilename(filename) + "/UM/";
 
 		// 1. Get the file content
 		ArrayList<String> lines = readFileLineByLine(filename);

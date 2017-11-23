@@ -36,17 +36,54 @@ public class MASTER_PART_9 {
 		Map<String, String> masterMap = new HashMap<String, String>();
 		System.out.println(computers);
 
+		/*NEED TO CLEAN THE REPOSITORY BEFORE LAUNCHING*/
+		// rm -rf tmp/yleprince
+		cleanDistantDirectories(computers);
+		
 		question47(computers);
 		masterMap = question48(computers);
 		//question50(masterMap);
-		question52(masterMap);
+		masterMap = question52(masterMap);
+		question53(masterMap);
 	}
 
-	public static void question53() {
+	public static void cleanDistantDirectories(ArrayList<String> computers) throws IOException, InterruptedException {
+		for (String pc : computers) {
+			ProcessBuilder pb_clear = new ProcessBuilder("ssh", "yleprince@" + pc, "rm", "-rf", "/tmp/yleprince");
+			getResponse(pb_clear, 5);
+			System.out.println("\t" + pc + " has been cleaned.");
+		}
 		
+		System.out.println("\n");
 	}
 	
-	public static void question52(Map<String, String> masterMap) throws IOException, InterruptedException {
+	
+	public static void question53(Map<String, String> masterMap) throws IOException, InterruptedException {
+		System.out.println("Question 53 -- start\n");
+		
+		System.out.println("Waiting until the end of the mapping process.");
+
+		Boolean fileExist = false;
+		while (fileExist == false){
+			fileExist = true;
+			for (String name: masterMap.keySet()){
+	            String filePath = name.toString();
+	            String pc = masterMap.get(name);
+	            ProcessBuilder pb_fileExist = new ProcessBuilder("ssh", "yleprince@" + pc, "test", "-f", filePath, "&&", "echo", "found", "||", "echo", "not", "found");
+				String rep_fileExist = getResponse(pb_fileExist, 5);
+				if (rep_fileExist == "not found") {
+					fileExist = false;
+					break;
+				}	            
+			}
+		}
+		
+		System.out.println("Phase de MAP terminée");
+		
+		System.out.println("\nQuestion 53 -- end");
+	}
+	
+	public static HashMap<String, String> question52(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 52 -- start\n");
 		
 		System.out.println("Launching the jar on the splits");
@@ -87,6 +124,8 @@ public class MASTER_PART_9 {
 
 
 		System.out.println("\nQuestion 52 -- end");
+		
+		return (HashMap<String, String>) masterMap;
 
 	}
 	
