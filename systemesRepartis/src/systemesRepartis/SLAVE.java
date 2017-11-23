@@ -17,9 +17,13 @@ public class SLAVE {
 		// question44();
 		// question45();
 		//question49(args); //  /tmp/yleprince/splits/S1.txt // java​ ​ -jar​ ​ slave.jar​ */
-		question51(args);
+		//question51(args);
+		question54(args); // Sx -> UMx & UMx -> SMx
 	}
 
+	public static void question54(String[]args) {
+		
+	}
 	public static void question51(String[] args) throws IOException, InterruptedException {
 		
 		question49(args);
