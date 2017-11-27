@@ -24,6 +24,7 @@ public class MASTER_PART_10 {
 		
 		System.out.println("Searching 3 computers");
 		ArrayList<String> computers = findComputers(3);
+		
 		System.out.println(computers);
 		Map<String, String> masterMap = new HashMap<String, String>();
 
@@ -35,6 +36,7 @@ public class MASTER_PART_10 {
 		masterMap = question52(masterMap);	// launch jar on splits
 		question53(masterMap);	// wait until all UMs exist
 	}
+	
 
 	public static void question53(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 53 -- start\n");
@@ -61,6 +63,33 @@ public class MASTER_PART_10 {
 		System.out.println("\nQuestion 53 -- end");
 	}
 	
+	public static boolean map(Map<String, String> masterMap_splitsFile_pc) throws IOException, InterruptedException {
+		Map<String, ArrayList<String>> keyToUMx = new HashMap<String, ArrayList<String>>();
+		String jarPath = WORKING_DIR + "jar/slave_map.jar";
+		
+		System.out.println("map");
+		for (String splitFile : masterMap_splitsFile_pc.keySet()) {
+			String pc = masterMap_splitsFile_pc.get(splitFile);
+			
+			System.out.println("\tLaunching " + jarPath + " with " + splitFile + " at " + pc + " | mode 0.");
+			String response_jar = launchJar(pc, jarPath, splitFile);
+			
+			String umName = "UM"+findFileNumber(splitFile);
+			for (String word : response_jar.split("\n")) {
+				ArrayList<String> umx = new ArrayList<String>();
+				if (keyToUMx.containsKey(word)) {
+					umx = keyToUMx.get(word);
+				}
+				umx.add(umName);
+				keyToUMx.put(word, umx);
+			}
+		}
+		System.out.println(keyToUMx);
+		
+		
+		return true;
+	}
+
 	public static HashMap<String, String> question52(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 52 -- start\n");
 		
@@ -72,7 +101,8 @@ public class MASTER_PART_10 {
 			String pc = masterMap.get(splitFile);
 			String jarPath = WORKING_DIR + "jar/slave_map.jar";
 			System.out.println("\tLaunching " + jarPath + " with " + splitFile + " at " + pc);
-			String response_jar = launchJar(pc, jarPath, splitFile);
+			String mode = "0"; //Transform split to um
+			String response_jar = launchJarWithOption(pc, jarPath, mode, splitFile);
 			
 			String umName = "UM"+findFileNumber(splitFile);
 			for (String word : response_jar.split("\n")) {
@@ -198,6 +228,12 @@ public class MASTER_PART_10 {
 		return response_mkdir;
 	}
 	
+	public static String launchJarWithOption(String pc, String jarPath, String mode, String arguments) throws IOException, InterruptedException {
+		ProcessBuilder pb_jar = new ProcessBuilder("ssh", "yleprince@" + pc, "java", "-jar", jarPath, mode, arguments);
+		String response_jar = getResponse(pb_jar, 5);
+		return response_jar;
+	}
+	
 	public static String launchJar(String pc, String jarPath, String arguments) throws IOException, InterruptedException {
 		ProcessBuilder pb_jar = new ProcessBuilder("ssh", "yleprince@" + pc, "java", "-jar", jarPath, arguments);
 		String response_jar = getResponse(pb_jar, 5);
@@ -266,7 +302,12 @@ public class MASTER_PART_10 {
 		ArrayList<String> computersAvailable = new ArrayList<String>();
 		ArrayList<String> computers = new ArrayList<String>();
 
-		for (int i = 10; i < 40; ++i) {
+		for (int i = 10; i < 50; ++i) {
+			computers.add("c45" + "-" + i);
+			computers.add("c126" + "-" + i);
+			computers.add("c127" + "-" + i);
+			computers.add("c128" + "-" + i);
+			computers.add("c129" + "-" + i);
 			computers.add("c130" + "-" + i);
 			computers.add("c133" + "-" + i);
 		}
@@ -360,6 +401,5 @@ public class MASTER_PART_10 {
 		te.interrupt();
 		return null;
 	}
-
 	
 }
