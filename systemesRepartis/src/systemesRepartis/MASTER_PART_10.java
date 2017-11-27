@@ -35,9 +35,13 @@ public class MASTER_PART_10 {
 		//question50(masterMap);	// launch jar on splits
 		masterMap = question52(masterMap);	// launch jar on splits
 		question53(masterMap);	// wait until all UMs exist
+		question56(masterMap);
 	}
 	
 
+	public static void question56(Map<String, String> masterMap) {
+		
+	}
 	public static void question53(Map<String, String> masterMap) throws IOException, InterruptedException {
 		System.out.println("Question 53 -- start\n");
 		
