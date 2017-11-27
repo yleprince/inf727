@@ -23,30 +23,63 @@ public class MASTER_PART_10 {
 
 		System.out.println("Searching 3 computers");
 		ArrayList<String> computers = findComputers(3);
-
 		System.out.println(computers);
-		Map<String, String> masterMap_splitPC = new HashMap<String, String>();
-		Map<String, String> masterMap_UMPC = new HashMap<String, String>();
-		Map<String, ArrayList<String>> masterMap_keyUMx = new HashMap<String, ArrayList<String>>();
 		cleanDistantDirectories(computers);
 
 		question47(computers); // deploy jar
-		masterMap_splitPC = question48(computers); // deploy splits
-		// question50(masterMap); // launch jar on splits
-		masterMap_keyUMx = question52(masterMap_splitPC); // launch jar on splits
-		masterMap_UMPC = updateMasterMapSplitToUM(masterMap_splitPC);
+		Map<String, String> masterMap_splitPC = question48(computers); // deploy splits
+
+		Map<String, ArrayList<String>> masterMap_keyUMx = question52(masterMap_splitPC); // launch jar on splits
+		Map<String, String> masterMap_UMPC = updateMasterMapSplitToUM(masterMap_splitPC);
+
+		Map<String, ArrayList<String>> masterMap_pcKeys = createMasterMap_pcKeys(computers, masterMap_keyUMx);
+		Map<String, HashSet<String>> masterMap_pcUMx = createMasterMap_pcUMtoShuffle(computers);
+
 		question53(masterMap_UMPC); // wait until all UMs exist
-		question56(masterMap_UMPC, masterMap_keyUMx, computers);	//shuffling
+		question56(masterMap_UMPC, masterMap_keyUMx, masterMap_pcUMx, masterMap_pcKeys); // shuffling
+		question57(masterMap_pcKeys, masterMap_keyUMx); // reduce
+	}
+
+	public static void question57(Map<String, ArrayList<String>> masterMap_pcKeys,
+			Map<String, ArrayList<String>> masterMap_keyUMx) throws IOException {
+		System.out.println("Question 57 -- start\n");
+
+		int SM_counter = 0;
+		for (String pc : masterMap_pcKeys.keySet()) {
+			ArrayList<String> keys = masterMap_pcKeys.get(pc);
+			for (String key : keys) {
+				ArrayList<String> args = new ArrayList<String>();
+
+				args.add("ssh");
+				args.add("yleprince@" + pc);
+				args.add("java");
+				args.add("-jar");
+				args.add(WORKING_DIR + "jar/slave_map.jar");
+				args.add("1");
+				args.add(key);
+				args.add(Integer.toString(SM_counter));
+
+				for (String UM : masterMap_keyUMx.get(key)) {
+					args.add(WORKING_DIR + "UM/" + UM + ".txt");
+				}
+				;
+
+				ProcessBuilder pb_jar = new ProcessBuilder(args);
+				pb_jar.start();
+
+				SM_counter += 1;
+			}
+		}
+
+		System.out.println("\nQuestion 57 -- end");
 	}
 
 	public static void question56(Map<String, String> masterMap_UMPC, Map<String, ArrayList<String>> masterMap_keyUMx,
-			ArrayList<String> computers) throws IOException, InterruptedException {
-		/*Shuffling*/
-		
-		System.out.println("Question 56 -- start\n");
+			Map<String, HashSet<String>> masterMap_pcUMtoShuffle, Map<String, ArrayList<String>> masterMap_pcKeys)
+			throws IOException, InterruptedException {
+		/* Shuffling */
 
-		Map<String, ArrayList<String>> masterMap_pcKeys = createMasterMap_pcKeys(computers, masterMap_keyUMx);
-		Map<String, HashSet<String>> masterMap_pcUMtoShuffle = createMasterMap_pcUMtoShuffle(computers);
+		System.out.println("Question 56 -- start\n");
 
 		for (String pc : masterMap_pcUMtoShuffle.keySet()) {
 			HashSet<String> UMxtoMove = masterMap_pcUMtoShuffle.get(pc);
@@ -65,15 +98,14 @@ public class MASTER_PART_10 {
 			System.out.println("\t" + UMxtoMove + "\t--->\t" + pc);
 		}
 
-		
 		System.out.println("\nShuffling files:");
 		shuffle(masterMap_pcUMtoShuffle, masterMap_UMPC);
 
 		System.out.println("\nQuestion 56 -- end");
 	}
 
-	public static void shuffle(Map<String, HashSet<String>> masterMap_pcUMtoShuffle,
-			Map<String, String> masterMap_UMPC) throws IOException, InterruptedException {
+	public static void shuffle(Map<String, HashSet<String>> masterMap_pcUMtoShuffle, Map<String, String> masterMap_UMPC)
+			throws IOException, InterruptedException {
 
 		for (String pcDest : masterMap_pcUMtoShuffle.keySet()) {
 
@@ -87,11 +119,13 @@ public class MASTER_PART_10 {
 			}
 		}
 	}
-	
-	public static void distantScp(String pcOri, String pcDest, String filepath) throws IOException, InterruptedException {
+
+	public static void distantScp(String pcOri, String pcDest, String filepath)
+			throws IOException, InterruptedException {
 		String user = "yleprince";
 		System.out.print("\t" + pcOri + " -> " + pcDest + " : " + filepath);
-		ProcessBuilder pb_scp = new ProcessBuilder("scp", user + "@" + pcOri + ":" + filepath, user + "@" + pcDest + ":" + filepath);
+		ProcessBuilder pb_scp = new ProcessBuilder("scp", user + "@" + pcOri + ":" + filepath,
+				user + "@" + pcDest + ":" + filepath);
 		System.err.println(getResponse(pb_scp, 5));
 	}
 
