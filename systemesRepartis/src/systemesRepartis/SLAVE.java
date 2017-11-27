@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,11 +28,11 @@ public class SLAVE {
 		if (mode.equals("0")) {
 			String filename = args[1];
 			String filenameNumber = systemesRepartis.MASTER_PART_10.findFileNumber(filename);
-			System.out.println("Launching the mode 0: from split creates an um");
+			//System.out.println("Launching the mode 0: from split creates an um");
 			split_to_um(work_dir_path, filenameNumber);
 		} else if (mode.equals("1")) {
 			String key = args[1].toLowerCase();
-			System.out.println("Launching the mode 1: from um creates an sm");
+			//System.out.println("Launching the mode 1: from um creates an sm");
 			String SMfilenamePath = reduce_part1(work_dir_path, key, args);
 			String RMfilenamePath = reduce_part2(work_dir_path, key, SMfilenamePath);
 			System.out.println(RMfilenamePath);
@@ -125,7 +127,13 @@ public class SLAVE {
 				}
 			}
 
-			// 3. export the mapped file
+			// 3. print the keys in console
+			Set<String> keys = new HashSet<String>(words);
+			for (String k : keys) {
+				System.out.println(k);
+			}
+			
+			// 4. export the mapped file
 			PrintWriter writer = new PrintWriter(outputFilename, "UTF-8");
 			for (String word : words) {
 				writer.println(word + " 1");
