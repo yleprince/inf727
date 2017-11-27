@@ -29,19 +29,46 @@ public class SLAVE {
 			System.out.println("Launching the mode 0: from split creates an um");
 			split_to_um(work_dir_path, filenameNumber);
 		} else if (mode.equals("1")) {
+			String key = args[1].toLowerCase();
 			System.out.println("Launching the mode 1: from um creates an sm");
-			reduce_part1(work_dir_path, args);
-			// split_to_um(work_dir_path, filenameNumber);
+			String SMfilenamePath = reduce_part1(work_dir_path, key, args);
+			String RMfilenamePath = reduce_part2(work_dir_path, key, SMfilenamePath);
+			System.out.println(RMfilenamePath);
 		}
 
 	}
 
-	public static void reduce_part1(String work_dir_path, String[] args) throws IOException, InterruptedException {
+	public static String reduce_part2(String work_dir_path, String key, String SMfilenamePath) throws IOException, InterruptedException {
+		mkDirLocal(work_dir_path + "reduces/");
+		String rmNumber = systemesRepartis.MASTER_PART_10.findFileNumber(SMfilenamePath);
+		String RMfilenamePath = work_dir_path + "reduces/RM" + rmNumber + ".txt";		
+		
+		int nbOccurences = getNbLines(SMfilenamePath);
+
+		PrintWriter writer = new PrintWriter(RMfilenamePath, "UTF-8");
+		writer.println(key + " " + nbOccurences);
+		writer.close();
+		
+		return RMfilenamePath;
+	}
+	
+	public static int getNbLines (String filename) throws IOException {
+		File f = new File(filename);
+		BufferedReader b = new BufferedReader(
+				new FileReader(f));
+		int nbLines = 0;
+		while ((b.readLine()) != null) {
+			nbLines += 1;
+		}
+		b.close();
+		return nbLines;
+	}
+	
+	public static String reduce_part1(String work_dir_path, String key, String[] args) throws IOException, InterruptedException {
 		/*
 		 * Take a key as input, and extract this key from the UMx files. Exports the SM
 		 * file to the output path given.
 		 */
-		String key = args[1].toLowerCase();
 		String smNumber = args[2];
 		ArrayList<String> umxFiles = new ArrayList<String>();
 
@@ -51,9 +78,11 @@ public class SLAVE {
 
 		// Create output folder
 		mkDirLocal(work_dir_path + "map/");
-		String outputFilename = work_dir_path + "map/SM" + smNumber + ".txt";
+		String SMfilenamePath = work_dir_path + "map/SM" + smNumber + ".txt";
 
-		createSM(outputFilename, umxFiles, key);
+		createSM(SMfilenamePath, umxFiles, key);
+		
+		return SMfilenamePath;
 	}
 
 	public static void createSM(String SMfilenamePath, ArrayList<String> umxFiles, String key) throws IOException {
