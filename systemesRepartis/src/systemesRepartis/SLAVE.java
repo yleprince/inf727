@@ -14,30 +14,69 @@ public class SLAVE {
 
 		// /tmp/yleprince/splits/S1.txt // java​ ​ -jar​ ​
 		// java -jar ./jar/slave_map.jar 0 ./split/split2.txt
-
 		analyzeArgs(args); // Sx -> UMx & UMx -> SMx
 	}
 
 	public static void analyzeArgs(String[] args) throws IOException, InterruptedException {
 		// System.out.println(args);
 
-		if (args.length != 2) {
-			System.err.println("Erreur: pas ou trop d'arguments pour le slave");
-		}
-
 		String mode = args[0];
-		String filename = args[1];
-		String filenameNumber = systemesRepartis.MASTER_PART_10.findFileNumber(filename);
 		String work_dir_path = "/tmp/yleprince/";
 
 		if (mode.equals("0")) {
+			String filename = args[1];
+			String filenameNumber = systemesRepartis.MASTER_PART_10.findFileNumber(filename);
 			System.out.println("Launching the mode 0: from split creates an um");
 			split_to_um(work_dir_path, filenameNumber);
-		} else if (true) {
+		} else if (mode.equals("1")) {
 			System.out.println("Launching the mode 1: from um creates an sm");
-			//split_to_um(work_dir_path, filenameNumber);
+			reduce_part1(work_dir_path, args);
+			// split_to_um(work_dir_path, filenameNumber);
 		}
 
+	}
+
+	public static void reduce_part1(String work_dir_path, String[] args) throws IOException, InterruptedException {
+		/*
+		 * Take a key as input, and extract this key from the UMx files. Exports the SM
+		 * file to the output path given.
+		 */
+		String key = args[1].toLowerCase();
+		String smNumber = args[2];
+		ArrayList<String> umxFiles = new ArrayList<String>();
+
+		for (int i = 3; i < args.length; ++i) {
+			umxFiles.add(args[i]);
+		}
+
+		// Create output folder
+		mkDirLocal(work_dir_path + "map/");
+		String outputFilename = work_dir_path + "map/SM" + smNumber + ".txt";
+
+		createSM(outputFilename, umxFiles, key);
+	}
+
+	public static void createSM(String SMfilenamePath, ArrayList<String> umxFiles, String key) throws IOException {
+
+		ArrayList<String> lines = new ArrayList<String>();
+		for (String file : umxFiles) {
+			File f = new File(file);
+			BufferedReader b = new BufferedReader(new FileReader(f));
+			String readLine = "";
+			while ((readLine = b.readLine()) != null) {
+				if (key.equals(readLine.split("\\s+")[0].toLowerCase())) {
+					lines.add(readLine);
+				}
+			}
+			b.close();
+		}
+
+		// 3. export the sm file
+		PrintWriter writer = new PrintWriter(SMfilenamePath, "UTF-8");
+		for (String line : lines) {
+			writer.println(line);
+		}
+		writer.close();
 	}
 
 	public static void split_to_um(String work_dir_path, String instanceID) throws IOException, InterruptedException {
@@ -67,7 +106,6 @@ public class SLAVE {
 			System.err.println("Split file is empty.");
 		}
 	}
-
 
 	public static void mkDirLocal(String path) throws IOException, InterruptedException {
 		/** Create a new folder */
@@ -113,4 +151,3 @@ public class SLAVE {
 		return path;
 	}
 }
-
