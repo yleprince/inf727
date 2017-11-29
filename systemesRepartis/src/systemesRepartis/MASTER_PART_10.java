@@ -543,7 +543,7 @@ public class MASTER_PART_10 {
 
 	public static ArrayList<String> readFileLineByLine(String filename) {
 		/**
-		 * Return an ArrayList<String> where all value is a line of the file
+		 * Return an ArrayList<String> where all value is a line of the file.
 		 */
 
 		ArrayList<String> lines = new ArrayList<String>();
