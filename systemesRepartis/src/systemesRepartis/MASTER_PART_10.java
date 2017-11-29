@@ -420,8 +420,8 @@ public class MASTER_PART_10 {
 	public static void cleanDistantDirectories(ArrayList<String> computers) throws IOException, InterruptedException {
 		for (String pc : computers) {
 			ProcessBuilder pb_clear = new ProcessBuilder("ssh", "yleprince@" + pc, "rm", "-rf", "/tmp/yleprince");
-			getResponse(pb_clear, 5);
-			System.out.println("\t" + pc + " has been cleaned.");
+			pb_clear.start();
+			System.out.println("\t" + pc + " should be cleaned.");
 		}
 
 		System.out.println("\n");
@@ -457,13 +457,12 @@ public class MASTER_PART_10 {
 		System.err.println(getResponse(pb_scp, 5));
 	}
 
-	public static String scp(String pc, String inputPath, String outputPath) throws IOException, InterruptedException {
+	public static void scp(String pc, String inputPath, String outputPath) throws IOException, InterruptedException {
 		String response_scp;
 		String user = "yleprince";
 		ProcessBuilder pb_scp = new ProcessBuilder("scp", inputPath, user + "@" + pc + ":" + outputPath);
-		response_scp = getResponse(pb_scp, 5);
-		return response_scp;
-	}
+		pb_scp.start();
+		}
 
 	public static void deployOnComputer(String pc, String inputPath, String outputPath)
 			throws IOException, InterruptedException {
@@ -471,8 +470,7 @@ public class MASTER_PART_10 {
 		String response_mkdir = mkDir(pc, outputPath);
 		System.out.println("\tDeployed on: " + pc + " at " + outputPath + response_mkdir);
 
-		String response_scp = scp(pc, inputPath, outputPath);
-		System.out.println("\tCopied on: " + pc + response_scp);
+		scp(pc, inputPath, outputPath);
 	}
 
 	public static void deploy(String computerListFilename, String inputPath, String outputPath)
