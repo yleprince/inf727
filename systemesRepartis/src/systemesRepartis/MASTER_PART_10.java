@@ -38,12 +38,12 @@ public class MASTER_PART_10 {
 		question53(masterMap_UMPC); // wait until all UMs exist
 		question56(masterMap_UMPC, masterMap_keyUMx, masterMap_pcUMx, masterMap_pcKeys); // shuffling
 		Map<String, ArrayList<String>> masterMap_pcRM = question57(masterMap_pcKeys, masterMap_keyUMx); // reduce
-		question58(masterMap_pcRM); //gather reduces
+		question58(masterMap_pcRM); // gather reduces
 
 	}
 
-	
-	public static void question58 (Map<String, ArrayList<String>> masterMap_pcRM) throws IOException, InterruptedException {
+	public static void question58(Map<String, ArrayList<String>> masterMap_pcRM)
+			throws IOException, InterruptedException {
 		System.out.println("Question 58 -- start\n");
 		System.out.println("Gathering RMx");
 		ArrayList<String> wordcount = new ArrayList<String>();
@@ -52,43 +52,21 @@ public class MASTER_PART_10 {
 				String filePath = WORKING_DIR + "reduces/RM" + RM + ".txt";
 				ProcessBuilder pb_catRmContent = new ProcessBuilder("ssh", "yleprince@" + pc, "cat", filePath);
 				String rep_fileExist = getResponse(pb_catRmContent, 5);
-				
+
 				System.out.println("\t" + rep_fileExist.split("\n")[0]);
 				wordcount.add(rep_fileExist.split("\n")[0]);
 			}
 		}
-		
+
 		PrintWriter writer = new PrintWriter("/tmp/wordcount.txt", "UTF-8");
-		for(String line : wordcount) {
+		for (String line : wordcount) {
 			writer.println(line);
 		}
 		writer.close();
 
-		
-		
-		
-		
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		System.out.println("\nQuestion 58 -- end");
 	}
-	
+
 	public static Map<String, ArrayList<String>> question57(Map<String, ArrayList<String>> masterMap_pcKeys,
 			Map<String, ArrayList<String>> masterMap_keyUMx) throws IOException, InterruptedException {
 		System.out.println("Question 57 -- start\n");
@@ -192,7 +170,6 @@ public class MASTER_PART_10 {
 			}
 		}
 	}
-
 
 	public static Map<String, ArrayList<String>> createMasterMap_pcSM(Map<String, ArrayList<String>> masterMap_pcKeys) {
 
@@ -471,7 +448,6 @@ public class MASTER_PART_10 {
 		return response_jar;
 	}
 
-	
 	public static void distantScp(String pcOri, String pcDest, String filepath)
 			throws IOException, InterruptedException {
 		String user = "yleprince";
@@ -481,15 +457,6 @@ public class MASTER_PART_10 {
 		System.err.println(getResponse(pb_scp, 5));
 	}
 
-	public static void scpToLocal(String pcOri, String filepath) throws IOException, InterruptedException {
-		String fileDest = "/tmp/";
-		String user = "yleprince";
-		ProcessBuilder pb_scp = new ProcessBuilder("scp", user + "@" + pcOri + ":" + filepath,
-				fileDest);
-		System.err.println(getResponse(pb_scp, 5));
-		
-	}
-	
 	public static String scp(String pc, String inputPath, String outputPath) throws IOException, InterruptedException {
 		String response_scp;
 		String user = "yleprince";
